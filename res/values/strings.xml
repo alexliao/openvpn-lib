@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">openvpn_lib</string>
+    
+    <string name="openvpn_install_error_title">Can\'t install OpenVpn</string>
+    <string name="openvpn_installer_title">OpenVpn Installer</string>
+    <string name="openvpn_installer_openvpn_not_found">OpenVpn binary not exists</string>
+    <string name="openvpn_installer_installing">Installing OpenVpn…</string>
+    <string name="openvpn_installer_checking">Checking OpenVpn…</string>
+    
+</resources>
