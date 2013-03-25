@@ -53,7 +53,7 @@ public class OpenvpnInstaller {
 		private final Context c;
 		private final File path;
 		private final Callback cb;
-		private ProgressDialog dialog;
+//		private ProgressDialog dialog;
 
 		public InstallTask(Context context, Callback callback) {
 			c = context;
@@ -140,29 +140,29 @@ public class OpenvpnInstaller {
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
-			dialog = ProgressDialog.show(c,
-					c.getString(R.string.openvpn_installer_title),
-					c.getString(R.string.openvpn_installer_checking), true);
+//			dialog = ProgressDialog.show(c,
+//					c.getString(R.string.openvpn_installer_title),
+//					c.getString(R.string.openvpn_installer_checking), true);
 		}
 
 		@Override
 		protected void onPostExecute(Result result) {
 			super.onPostExecute(result);
-			if (dialog.isShowing())
-				dialog.dismiss();
+//			if (dialog.isShowing())
+//				dialog.dismiss();
 			cb.done(result);
 		}
 
 		@Override
 		protected void onProgressUpdate(String... values) {
-			dialog.setMessage(values[0]);
+//			dialog.setMessage(values[0]);
 			super.onProgressUpdate(values);
 		}
 
 		@Override
 		protected void onCancelled() {
-			if (dialog.isShowing())
-				dialog.dismiss();
+//			if (dialog.isShowing())
+//				dialog.dismiss();
 			super.onCancelled();
 		}
 	}
