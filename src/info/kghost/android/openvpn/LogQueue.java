@@ -5,7 +5,7 @@ import java.util.Iterator;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-class LogQueue implements Parcelable, Iterable<String> {
+public class LogQueue implements Parcelable, Iterable<String> {
 	private String[] buffer = null;
 	private int start = 0;
 	private int end = 0;
