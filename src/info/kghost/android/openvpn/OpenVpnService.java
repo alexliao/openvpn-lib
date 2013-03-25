@@ -61,12 +61,12 @@ public class OpenVpnService extends VpnService {
 		private String[] prepare(OpenvpnProfile profile) throws Exception {
 			ArrayList<String> config = new ArrayList<String>();
 			config.add(new File(getCacheDir(), "openvpn").getAbsolutePath());
-			config.add("--client");
-			config.add("--tls-client");
+//			config.add("--client");
+//			config.add("--tls-client");
 
-			config.add("--script-security");
-			config.add("0");
-
+//			config.add("--script-security");
+//			config.add("0");
+//
 			config.add("--management");
 			config.add(managementPath.getAbsolutePath());
 			config.add("unixseq");
@@ -241,6 +241,7 @@ public class OpenVpnService extends VpnService {
 				UnknownHostException {
 			ByteBuffer buffer = ByteBuffer.allocateDirect(2000);
 			VpnService.Builder builder = null;
+			builder = new VpnService.Builder();
 			while (true) {
 				buffer.limit(0);
 				FileDescriptorHolder fd = new FileDescriptorHolder();
@@ -297,7 +298,7 @@ public class OpenVpnService extends VpnService {
 							int end = cmd.indexOf(',', start + 1);
 							String state = cmd.substring(start + 1, end);
 							if (state.equals("GET_CONFIG")) {
-								builder = new VpnService.Builder();
+//								builder = new VpnService.Builder();
 							} else if (state.equals("CONNECTED")) {
 								builder = null;
 								publishProgress(VpnState.CONNECTED);
@@ -347,7 +348,8 @@ public class OpenVpnService extends VpnService {
 
 			try {
 //				if(true==true) throw new Exception("test what if something wrong in OpenVpnService::doInBackground");
-				process = Runtime.getRuntime().exec(prepare(profile));
+				String[] progArray = prepare(profile);
+				process = Runtime.getRuntime().exec(progArray);
 				for (int i = 0; i < 30 && isProcessAlive(process)
 						&& sock == null; ++i)
 					try { // Wait openvpn to create management socket
@@ -509,6 +511,7 @@ public class OpenVpnService extends VpnService {
 
 	@Override
 	public IBinder onBind(Intent intent) {
+		Log.d("", "OpenVpnService onBind");
 		return mBinder;
 	}
 
@@ -613,6 +616,7 @@ public class OpenVpnService extends VpnService {
 
 	@Override
 	public void onCreate() {
+		Log.d("", "OpenVpnService onCreate");
 		super.onCreate();
 		restoreLog();
 		managementPath = new File(getCacheDir(), "manage");
@@ -621,12 +625,14 @@ public class OpenVpnService extends VpnService {
 
 	@Override
 	public void onRevoke() {
+		Log.d("", "OpenVpnService onRevoke");
 		if (mTask != null)
 			mTask.interrupt();
 	}
 
 	@Override
 	public void onDestroy() {
+		Log.d("", "OpenVpnService onDestroy");
 		if (mTask != null)
 			mTask.interrupt();
 		executor = null;
