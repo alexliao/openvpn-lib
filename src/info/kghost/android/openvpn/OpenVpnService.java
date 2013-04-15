@@ -237,11 +237,17 @@ public class OpenVpnService extends VpnService {
 			return Integer.bitCount(mask_int);
 		}
 
+		private VpnService.Builder mBuilder;
+		private VpnService.Builder getBuilder(){
+			if(mBuilder == null) mBuilder = new VpnService.Builder();
+			return mBuilder;
+		}
+		
 		private void doCommands() throws CharacterCodingException,
 				UnknownHostException {
 			ByteBuffer buffer = ByteBuffer.allocateDirect(2000);
-			VpnService.Builder builder = null;
-			builder = new VpnService.Builder();
+//			VpnService.Builder builder = null;
+//			builder = new VpnService.Builder();
 			while (true) {
 				buffer.limit(0);
 				FileDescriptorHolder fd = new FileDescriptorHolder();
@@ -269,20 +275,20 @@ public class OpenVpnService extends VpnService {
 							} else if (c.startsWith("tun-ip ")) {
 								String[] ip = c.substring("tun-ip ".length())
 										.split(" ");
-								builder.addAddress(ip[0], 32);
+								getBuilder().addAddress(ip[0], 32);
 							} else if (c.startsWith("tun-mtu ")) {
-								builder.setMtu(Integer.parseInt(c
+								getBuilder().setMtu(Integer.parseInt(c
 										.substring("tun-mtu ".length())));
 							} else if (c.startsWith("tun-route ")) {
 								String[] route = c.substring(
 										"tun-route ".length()).split(" ");
-								builder.addRoute(route[0],
+								getBuilder().addRoute(route[0],
 										netmaskToPrefixLength(route[1]));
 							} else if (c.startsWith("tun-redirect-gateway")) {
-								builder.addRoute("0.0.0.0", 0);
+								getBuilder().addRoute("0.0.0.0", 0);
 							} else if (c.startsWith("tun-dns ")) {
 								String dns = c.substring("tun-dns ".length());
-								builder.addDnsServer(dns);
+								getBuilder().addDnsServer(dns);
 							} else {
 								Log.i(getClass().getName(), "Ignore ECHO: "
 										+ cmd);
@@ -290,7 +296,7 @@ public class OpenVpnService extends VpnService {
 						} else if (cmd
 								.equals(">NEED-TUN:Need 'TUN' confirmation")) {
 							FileDescriptorHolder tun = new FileDescriptorHolder(
-									builder.establish().detachFd());
+									getBuilder().establish().detachFd());
 							sock.write(str_to_bb("tun TUN ok\n"), tun);
 							tun.close();
 						} else if (cmd.startsWith(">STATE:")) {
@@ -300,7 +306,7 @@ public class OpenVpnService extends VpnService {
 							if (state.equals("GET_CONFIG")) {
 //								builder = new VpnService.Builder();
 							} else if (state.equals("CONNECTED")) {
-								builder = null;
+								mBuilder = null;
 								publishProgress(VpnState.CONNECTED);
 							}
 						} else if (cmd.startsWith(">PASSWORD:")) {
