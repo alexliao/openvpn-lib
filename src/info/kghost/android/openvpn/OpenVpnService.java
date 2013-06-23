@@ -240,6 +240,7 @@ public class OpenVpnService extends VpnService {
 		private VpnService.Builder mBuilder;
 		private VpnService.Builder getBuilder(){
 			if(mBuilder == null) mBuilder = new VpnService.Builder();
+			mBuilder.setSession(profile.getSessionName());
 			return mBuilder;
 		}
 		
@@ -400,6 +401,14 @@ public class OpenVpnService extends VpnService {
 					return e.getLocalizedMessage();
 				}
 				publishProgress(VpnState.IDLE);
+				
+// experiment
+//				try {
+//					Log.v(getClass().getName(), "reconnect");
+//					mBinder.connect(profile, username, password);
+//				} catch (RemoteException e) {
+//					e.printStackTrace();
+//				}
 			}
 		}
 

@@ -2,6 +2,7 @@ package info.kghost.android.openvpn;
 
 import java.io.Serializable;
 
+import android.net.VpnService;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -13,6 +14,8 @@ public class OpenvpnProfile implements Parcelable, Serializable {
 
 	private static final String PROTO_UDP = "udp";
 	private static final String PROTO_TCP = "tcp";
+
+	private String mSessionName; // for VpnService.Builder.setSession();
 
 	private String mName; // unique display name
 	private String mId; // unique identifier
@@ -41,6 +44,15 @@ public class OpenvpnProfile implements Parcelable, Serializable {
 	private String mTlsAuthKey;
 	private String mTlsAuthKeyDirection;
 	private String mExtra;
+
+
+	public void setSessionName(String name) {
+		mSessionName = name;
+	}
+
+	public String getSessionName() {
+		return mSessionName;
+	}
 
 	/** Sets a user-friendly name for this profile. */
 	public void setName(String name) {
