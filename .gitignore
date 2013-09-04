@@ -1,11 +1,11 @@
-libs/
+#libs/
 gen/
 bin/
 build/
 .gradle/
 
 local.properties
-local_config.xml
+#local_config.xml
 
 .DS_Store
 *.orig
